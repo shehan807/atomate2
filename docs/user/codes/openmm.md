@@ -17,6 +17,7 @@ atomate2 from source, you can clone the repository and install from source.
 >>> git clone https://github.com/materialsproject/atomate2
 >>> cd atomate2
 >>> pip install -e '.[openmm]'
+>>> conda install -c conda-forge enumlib packmol bader openbabel openff-toolkit==0.16.2 openff-interchange==0.3.22 --yes
 ```
 
 To test the openmm installation, you can run the following command. If
