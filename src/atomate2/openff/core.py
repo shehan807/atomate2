@@ -59,7 +59,7 @@ def openff_job(method: Callable) -> job:
 @openff_job
 def generate_interchange(
     input_mol_specs: list[MoleculeSpec | dict],
-    mass_density: float,
+    target_density: float,
     force_field: str = "openff_unconstrained-2.1.1.offxml",
     pack_box_kwargs: dict = None,
     tags: list[str] = None,
@@ -84,7 +84,7 @@ def generate_interchange(
         dictionaries that can be passed to `create_mol_spec` to create
         MoleculeSpec objects. See the `create_mol_spec` function
         for details on the expected format of the dictionaries.
-    mass_density : float
+    target_density : float
         The target mass density for packing the molecules into
         a box, kg/L.
     force_field : str, optional
@@ -120,7 +120,7 @@ def generate_interchange(
     topology = pack_box(
         molecules=[tk.Molecule.from_json(spec.openff_mol) for spec in mol_specs],
         number_of_copies=[spec.count for spec in mol_specs],
-        mass_density=mass_density * unit.grams / unit.milliliter,
+        target_density=target_density * unit.grams / unit.milliliter,
         **pack_box_kwargs,
     )
 
