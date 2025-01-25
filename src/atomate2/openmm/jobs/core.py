@@ -243,3 +243,34 @@ class TempChangeMaker(BaseOpenMMMaker):
             self._resolve_attr("friction_coefficient", prev_task) / picoseconds,
             self._resolve_attr("step_size", prev_task) * picoseconds,
         )
+
+@dataclass
+class EquilibrationMaker(BaseOpenMMMaker):
+    """A maker class for performing a parameter-dependent equilibration.
+
+    """
+    EnsembleMaker: BaseOpenMMMaker 
+    should_continue = None
+    max_equilibration_steps: int = 1_000_000
+    n_steps: int = 1_000
+
+    def run_openmm(self, sim: Simulation, dir_name: Path) -> None:
+        """Evolve the simulation until a convergence criterion is met.
+        """
+        if self.should_continue is None: 
+            # if not criterion is supplied, run as normal 
+            def always_continue(...):
+                pass 
+
+        total_steps = 0
+        while total_steps < self.max_equilibration_steps and self.should_continue(sim):
+            sim.step(n_steps)
+            total_steps += self.n_steps
+                
+    def should_continue(sim: Simulation) -> bool:
+        state = sim.context.getState(getEnergy=True)
+        PE = state.getPotentialEnergy()
+        PE = PE.value_in_unit(PE.unit)
+        return False
+
+
